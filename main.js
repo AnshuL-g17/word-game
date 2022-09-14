@@ -18,6 +18,7 @@ const scoreDisplay = document.querySelector('#score');
 const timeDisplay = document.querySelector('#time');
 const message = document.querySelector('#message');
 const seconds = document.querySelector('#seconds');
+var lower = wordInput.value.toLowerCase();
 
 
 const words = [
@@ -74,7 +75,7 @@ function startMatch(){
 }
 
 function matchWords(){
-	if (wordInput.value === currentWord.innerHTML) {
+	if (lower === currentWord.innerHTML) {
             message.innerHTML = 'correct!!!';
             return true;
 		}
