@@ -75,7 +75,7 @@ function startMatch(){
 }
 
 function matchWords(){
-	if (lower === currentWord.innerHTML) {
+	if (wordInput.value === currentWord.innerHTML) {
             message.innerHTML = 'correct!!!';
             return true;
 		}
