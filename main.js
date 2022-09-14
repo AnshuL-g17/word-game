@@ -74,7 +74,7 @@ function startMatch(){
 }
 
 function matchWords(){
-	if (wordInput.value.toLowerCase()===currentWord.innerHTML) {
+	if (wordInput.toLowerCase().value===currentWord.innerHTML) {
             message.innerHTML = 'correct!!!';
             return true;
 		}
