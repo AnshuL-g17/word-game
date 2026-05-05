@@ -1,43 +1,59 @@
 window.addEventListener('load', init);
 
-// Levels based on score
+// Levels
 const levels = {
-  easy: { time: 6, words: [] },
-  medium: { time: 4, words: [] },
-  hard: { time: 3, words: [] },
-  insane: { time: 2, words: [] }
+  easy: {
+    time: 6,
+    words: [
+      'cat','dog','sun','pen','cup','hat','ball','tree','fish','milk',
+      'road','star','blue','green','book','chair','table','phone','glass','clock',
+      'plant','stone','bread','water','light','mouse','paper','shirt','shoe','bag'
+    ]
+  },
+  medium: {
+    time: 4,
+    words: [
+      'river','market','planet','silver','yellow','button','window','pencil','laptop','mobile',
+      'garden','forest','desert','island','camera','pillow','basket','orange','purple','guitar',
+      'engine','rocket','travel','screen','mirror','cookie','bottle','hammer','driver','pocket'
+    ]
+  },
+  hard: {
+    time: 3,
+    words: [
+      'developer','javascript','computer','keyboard','internet','software','hardware','database',
+      'algorithm','function','variable','framework','compiler','debugging','encryption','network',
+      'processor','application','interface','protocol','iteration','recursion','optimization'
+    ]
+  },
+  insane: {
+    time: 2,
+    words: [
+      'extraordinary','communication','transformation','responsibility','misinterpretation',
+      'internationalization','hyperconnectivity','synchronization','characterization',
+      'implementation','multidimensional','decentralization','microarchitecture',
+      'electromagnetism','thermodynamics','neuroplasticity','cryptocurrency',
+      'institutionalization','counterproductive','hyperparameterization'
+    ]
+  }
 };
 
 let time = 6;
 let score = 0;
 let isPlaying = false;
 let currentLevel = "easy";
+let usedWords = [];
 
-// DOM elements
+// DOM
 const wordInput = document.querySelector('#word-input');
 const currentWord = document.querySelector('#current-word');
 const scoreDisplay = document.querySelector('#score');
 const timeDisplay = document.querySelector('#time');
 const message = document.querySelector('#message');
 const seconds = document.querySelector('#seconds');
+const levelDisplay = document.querySelector('#level');
 
-// Word banks
-levels.easy.words = [
-  'hat','cat','dog','run','sun','book','pen','cup','tree','ball'
-];
-
-levels.medium.words = [
-  'river','lucky','hero','magic','space','master','echo','joke','happy','smart'
-];
-
-levels.hard.words = [
-  'developer','javascript','nutrition','revolver','siblings','investigate','symptom'
-];
-
-levels.insane.words = [
-  'establishment','horrendous','extraordinary','communication','transformation','responsibility'
-];
-
+// INIT
 function init() {
   updateLevel();
   showWord();
@@ -46,6 +62,7 @@ function init() {
   setInterval(checkStatus, 50);
 }
 
+// LEVEL LOGIC
 function updateLevel() {
   if (score >= 30) currentLevel = "insane";
   else if (score >= 20) currentLevel = "hard";
@@ -54,23 +71,27 @@ function updateLevel() {
 
   time = levels[currentLevel].time;
   seconds.innerHTML = time;
+  levelDisplay.innerHTML = currentLevel.toUpperCase();
 }
 
+// MATCH LOGIC
 function startMatch() {
   if (matchWords()) {
     isPlaying = true;
 
-    updateLevel(); // 🔥 update difficulty
+    score++;
+    updateLevel();
+
     time = levels[currentLevel].time + 1;
 
     showWord();
     wordInput.value = '';
-    score++;
   }
 
   scoreDisplay.innerHTML = score < 0 ? 0 : score;
 }
 
+// CHECK MATCH
 function matchWords() {
   if (wordInput.value === currentWord.innerHTML) {
     message.innerHTML = 'Correct!';
@@ -81,24 +102,40 @@ function matchWords() {
   }
 }
 
+// SHOW WORD (NO REPEAT)
 function showWord() {
-  const words = levels[currentLevel].words;
+  let words = levels[currentLevel].words.filter(word => !usedWords.includes(word));
+
+  // If all words used → player wins
+  if (words.length === 0) {
+    message.innerHTML = "🎉 You completed all words!";
+    isPlaying = false;
+    return;
+  }
+
   const randIndex = Math.floor(Math.random() * words.length);
-  currentWord.innerHTML = words[randIndex];
+  const selectedWord = words[randIndex];
+
+  currentWord.innerHTML = selectedWord;
+  usedWords.push(selectedWord);
 }
 
+// TIMER
 function countdown() {
   if (time > 0) {
     time--;
   } else {
     isPlaying = false;
   }
+
   timeDisplay.innerHTML = time;
 }
 
+// GAME STATUS
 function checkStatus() {
   if (!isPlaying && time === 0) {
     message.innerHTML = 'Game Over!';
     score = 0;
+    usedWords = []; // reset words
   }
 }
