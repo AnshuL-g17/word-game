@@ -1,39 +1,59 @@
 window.addEventListener('load', init);
 
-// Levels
+// LEVELS + HUGE WORD BANK
 const levels = {
   easy: {
     time: 6,
     words: [
       'cat','dog','sun','pen','cup','hat','ball','tree','fish','milk',
       'road','star','blue','green','book','chair','table','phone','glass','clock',
-      'plant','stone','bread','water','light','mouse','paper','shirt','shoe','bag'
+      'plant','stone','bread','water','light','mouse','paper','shirt','shoe','bag',
+      'ring','leaf','fire','snow','rain','wind','dust','salt','sugar','coin',
+      'box','key','lock','wall','door','floor','roof','hill','lake','river',
+      'bird','goat','lion','tiger','zebra','horse','sheep','camel','frog','snake',
+      'apple','mango','grape','peach','berry','lemon','melon','guava','plum','pear'
     ]
   },
+
   medium: {
     time: 4,
     words: [
       'river','market','planet','silver','yellow','button','window','pencil','laptop','mobile',
       'garden','forest','desert','island','camera','pillow','basket','orange','purple','guitar',
-      'engine','rocket','travel','screen','mirror','cookie','bottle','hammer','driver','pocket'
+      'engine','rocket','travel','screen','mirror','cookie','bottle','hammer','driver','pocket',
+      'energy','signal','motion','system','object','design','circle','square','random','future',
+      'memory','charge','credit','filter','search','update','delete','insert','select',
+      'school','college','office','clinic','temple','mosque','church','station','airport',
+      'artist','writer','singer','player','doctor','lawyer','teacher','farmer','builder'
     ]
   },
+
   hard: {
     time: 3,
     words: [
       'developer','javascript','computer','keyboard','internet','software','hardware','database',
       'algorithm','function','variable','framework','compiler','debugging','encryption','network',
-      'processor','application','interface','protocol','iteration','recursion','optimization'
+      'processor','application','interface','protocol','iteration','recursion','optimization',
+      'authentication','authorization','synchronization','configuration','integration','deployment',
+      'architecture','microservice','containerization','virtualization','orchestration',
+      'performance','scalability','availability','consistency','throughput','latency',
+      'refactoring','abstraction','encapsulation','inheritance','polymorphism',
+      'multithreading','asynchronous','scheduling','execution','dependency'
     ]
   },
+
   insane: {
     time: 2,
     words: [
       'extraordinary','communication','transformation','responsibility','misinterpretation',
-      'internationalization','hyperconnectivity','synchronization','characterization',
-      'implementation','multidimensional','decentralization','microarchitecture',
-      'electromagnetism','thermodynamics','neuroplasticity','cryptocurrency',
-      'institutionalization','counterproductive','hyperparameterization'
+      'internationalization','hyperconnectivity','characterization','implementation',
+      'multidimensional','decentralization','microarchitecture','electromagnetism',
+      'thermodynamics','neuroplasticity','cryptocurrency','institutionalization',
+      'counterproductive','hyperparameterization','interoperability',
+      'counterintuitive','electroencephalogram','psychophysiological',
+      'microminiaturization','spectrophotometry','hyperresponsiveness',
+      'counterrevolutionary','overintellectualization','transubstantiation',
+      'interdisciplinary','hyperventilation','characteristically','unconstitutionality'
     ]
   }
 };
@@ -62,7 +82,7 @@ function init() {
   setInterval(checkStatus, 50);
 }
 
-// LEVEL LOGIC
+// LEVEL SYSTEM
 function updateLevel() {
   if (score >= 30) currentLevel = "insane";
   else if (score >= 20) currentLevel = "hard";
@@ -74,14 +94,13 @@ function updateLevel() {
   levelDisplay.innerHTML = currentLevel.toUpperCase();
 }
 
-// MATCH LOGIC
+// MATCH
 function startMatch() {
   if (matchWords()) {
     isPlaying = true;
-
     score++;
-    updateLevel();
 
+    updateLevel();
     time = levels[currentLevel].time + 1;
 
     showWord();
@@ -102,13 +121,12 @@ function matchWords() {
   }
 }
 
-// SHOW WORD (NO REPEAT)
+// NO REPEAT WORD SYSTEM
 function showWord() {
   let words = levels[currentLevel].words.filter(word => !usedWords.includes(word));
 
-  // If all words used → player wins
   if (words.length === 0) {
-    message.innerHTML = "🎉 You completed all words!";
+    message.innerHTML = "🎉 You finished all words!";
     isPlaying = false;
     return;
   }
@@ -136,6 +154,6 @@ function checkStatus() {
   if (!isPlaying && time === 0) {
     message.innerHTML = 'Game Over!';
     score = 0;
-    usedWords = []; // reset words
+    usedWords = [];
   }
 }
